@@ -1,0 +1,201 @@
+\documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{algpseudocode}
+\usepackage{graphicx}
+\usepackage{pgfplots}
+\usepackage{subcaption}
+\pgfplotsset{compat=1.18}
+
+\usetikzlibrary{automata,positioning}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{Yousef Alaa Awad}
+\chead{\hmwkClass\: \hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+%
+% Create Problem Sections
+%
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+
+\newcommand{\hmwkTitle}{Homework\ \#4}
+\newcommand{\hmwkDueDate}{March 2, 2026}
+\newcommand{\hmwkClass}{Electronics 1}
+
+%
+% Title Page
+%
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    \normalsize\vspace{0.1in}
+    \vspace{3in}
+}
+
+\author{Yousef Alaa Awad}
+
+% Problems start here
+\begin{document}
+
+\maketitle
+\pagebreak
+
+\section{6.2}
+\subsection{Part A}
+Given: $g_m = 95 \text{ mA/V}$, $\beta = 125$, and $V_A = 200 \text{ V}$. We assume the thermal voltage $V_T = 0.026 \text{ V}$.
+
+First, we determine the quiescent collector current $I_{CQ}$. The transconductance $g_m$ is defined as the ratio of the collector current to the thermal voltage:
+$$ g_m = \frac{I_{CQ}}{V_T} \implies I_{CQ} = g_m \cdot V_T $$
+$$ I_{CQ} = (95 \text{ mA/V}) \cdot (0.026 \text{ V}) = 2.47 \text{ mA} $$
+
+Next, we calculate the small-signal base resistance $r_\pi$. It is related to $\beta$, $V_T$, and $I_{CQ}$:
+$$ r_\pi = \frac{\beta V_T}{I_{CQ}} = \frac{125 \cdot 0.026}{2.47 \text{ mA}} \approx 1.32 \text{ k}\Omega $$
+
+Finally, the small-signal output resistance $r_o$ depends on the Early voltage $V_A$ and the collector current $I_{CQ}$:
+$$ r_o = \frac{V_A}{I_{CQ}} = \frac{200 \text{ V}}{2.47 \text{ mA}} \approx 81 \text{ k}\Omega $$
+
+\subsection{Part B}
+Given: $g_m = 120 \text{ mA/V}$ and $r_\pi = 1.2 \text{ k}\Omega$.
+
+We again use the transconductance formula to find the collector current $I_{CQ}$:
+$$ g_m = \frac{I_{CQ}}{V_T} \implies I_{CQ} = (120 \text{ mA/V}) \cdot (0.026 \text{ V}) = 3.12 \text{ mA} $$
+
+We can find the common-emitter current gain $\beta$ by utilizing the relationship between $g_m$, $r_\pi$, and $\beta$:
+$$ \beta = g_m \cdot r_\pi = (120 \text{ mA/V}) \cdot (1.2 \text{ k}\Omega) = 144 $$
+
+\pagebreak
+\section{6.6}
+\subsection{Part A - DC Analysis}
+Given parameters: $V_{CC} = 5 \text{ V}$, $V_A = 100 \text{ V}$, $R_B = 25 \text{ k}\Omega$, $\beta = 120$, and $r_\pi = 5.4 \text{ k}\Omega$.
+
+First, we can determine $I_{CQ}$ from the given small-signal base resistance $r_\pi$:
+$$ r_\pi = \frac{\beta V_T}{I_{CQ}} \implies 5.4 \text{ k}\Omega = \frac{120 \cdot 0.026}{I_{CQ}} \implies I_{CQ} = 0.578 \text{ mA} $$
+
+The problem states that the Q-point should be in the center of the load line. This means the quiescent collector-emitter voltage is exactly half of the supply voltage:
+$$ V_{CEQ} = \frac{1}{2} V_{CC} = \frac{1}{2} (5 \text{ V}) = 2.5 \text{ V} $$
+
+Applying Kirchhoff's Voltage Law (KVL) at the collector-emitter loop:
+$$ V_{CC} = I_{CQ} R_C + V_{CEQ} \implies 5 = (0.578 \text{ mA}) R_C + 2.5 \implies R_C = 4.33 \text{ k}\Omega $$
+
+To find the required base voltage $V_{BB}$, we must first find the base current $I_{BQ}$:
+$$ I_{BQ} = \frac{I_{CQ}}{\beta} = \frac{0.578 \text{ mA}}{120} = 0.00482 \text{ mA} $$
+
+Now, applying KVL at the base-emitter loop (assuming $V_{BE(on)} = 0.7 \text{ V}$):
+$$ V_{BB} = I_{BQ} R_B + V_{BE(on)} = (0.00482 \text{ mA})(25 \text{ k}\Omega) + 0.7 = 0.820 \text{ V} $$
+
+\subsection{Part B - Small-Signal Voltage Gain}
+To find the voltage gain $A_v$, we need the remaining small-signal parameters, $g_m$ and $r_o$:
+$$ g_m = \frac{I_{CQ}}{V_T} = \frac{0.578 \text{ mA}}{0.026 \text{ V}} = 22.2 \text{ mA/V} $$
+$$ r_o = \frac{V_A}{I_{CQ}} = \frac{100 \text{ V}}{0.578 \text{ mA}} \approx 173 \text{ k}\Omega $$
+
+The voltage gain for this common-emitter configuration is given by:
+$$ A_v = -g_m \left( \frac{r_\pi}{r_\pi + R_B} \right) (r_o \parallel R_C) = -\frac{\beta (r_o \parallel R_C)}{r_\pi + R_B} $$
+$$ A_v = -\frac{120 \cdot (173 \text{ k}\Omega \parallel 4.33 \text{ k}\Omega)}{5.4 \text{ k}\Omega + 25 \text{ k}\Omega} = -\frac{120 \cdot 4.22}{30.4} = -16.66 $$
+
+\pagebreak
+\section{6.12}
+\subsection{Part A - DC Bias Design}
+Given parameters: $V_{CC} = 5 \text{ V}$, $V_{EE} = -5 \text{ V}$, $R_C = 1.2 \text{ k}\Omega$, $R_E = 0.2 \text{ k}\Omega$, and $\beta = 150$.
+
+For the maximum symmetrical swing, the Q-point is centered between the supplies:
+$$ V_{CEQ} = \frac{1}{2}(V_{CC} - V_{EE}) = \frac{1}{2}(5 - (-5)) = 5 \text{ V} $$
+
+Applying KVL from $V_{CC}$ to $V_{EE}$ through the transistor:
+$$ V_{CC} - I_{CQ} R_C - V_{CEQ} - I_{EQ} R_E = V_{EE} $$
+Assuming $I_{CQ} \approx I_{EQ}$ (or using $I_{EQ} = \frac{\beta+1}{\beta} I_{CQ}$ for precision), we get:
+$$ 10 = I_{CQ}(1.2) + 5 + I_{CQ} \left(\frac{151}{150}\right) (0.2) \implies 5 = I_{CQ}(1.2 + 0.201) \implies I_{CQ} = 3.57 \text{ mA} $$
+
+The base current is:
+$$ I_{BQ} = \frac{I_{CQ}}{\beta} = \frac{3.57 \text{ mA}}{150} = 0.0238 \text{ mA} $$
+
+For a bias-stable circuit, we enforce the design rule of thumb:
+$$ R_{TH} = 0.1(1 + \beta)R_E = 0.1(151)(0.2 \text{ k}\Omega) = 3.02 \text{ k}\Omega $$
+
+We apply KVL to the Thevenin equivalent base circuit:
+$$ V_{TH} = I_{BQ} R_{TH} + V_{BE(on)} + I_{EQ} R_E + V_{EE} $$
+$$ V_{TH} = (0.0238)(3.02) + 0.7 + (151 \cdot \frac{0.0238}{150})(0.2) - 5 = -3.51 \text{ V} $$
+
+The Thevenin voltage is defined by the voltage divider between $V_{CC}$ and $V_{EE}$:
+$$ V_{TH} = \frac{R_2}{R_1 + R_2}(V_{CC} - V_{EE}) + V_{EE} = \frac{R_{TH}}{R_1}(10) - 5 $$
+$$ -3.51 = \frac{3.02}{R_1}(10) - 5 \implies 1.49 = \frac{30.2}{R_1} \implies R_1 = 20.26 \text{ k}\Omega $$
+
+Using the parallel resistance formula $R_{TH} = R_1 \parallel R_2$:
+$$ 3.02 = \frac{20.26 \cdot R_2}{20.26 + R_2} \implies R_2 = 3.55 \text{ k}\Omega $$
+
+\subsection{Part B - Small-Signal Voltage Gain}
+To calculate the voltage gain, we first find $r_\pi$:
+$$ r_\pi = \frac{\beta V_T}{I_{CQ}} = \frac{150 \cdot 0.026}{3.57 \text{ mA}} \approx 1.09 \text{ k}\Omega $$
+
+The gain equation for a common-emitter amplifier with an unbypassed emitter resistor (ignoring $r_o$) is:
+$$ A_v = \frac{-\beta R_C}{r_\pi + (1 + \beta)R_E} $$
+$$ A_v = \frac{-150 \cdot 1.2}{1.09 + (151 \cdot 0.2)} = \frac{-180}{1.09 + 30.2} \approx -5.75 $$
+
+\pagebreak
+\section{6.14}
+\subsection{Part A - DC Bias Design}
+Given parameters: $V_{CC} = 3.3 \text{ V}$, $V_{EE} = 0 \text{ V}$, $R_C = 2 \text{ k}\Omega$, $R_E = 1 \text{ k}\Omega$, and $\beta = 100$.
+
+For a centered Q-point:
+$$ V_{CEQ} = \frac{1}{2} V_{CC} = 1.65 \text{ V} $$
+
+Applying KVL at the collector-emitter loop:
+$$ V_{CC} = I_{CQ} R_C + V_{CEQ} + I_{EQ} R_E $$
+$$ 3.3 = I_{CQ}(2) + 1.65 + I_{CQ}\left(\frac{101}{100}\right)(1) \implies 1.65 = I_{CQ}(2 + 1.01) \implies I_{CQ} = 0.548 \text{ mA} $$
+
+The base current is:
+$$ I_{BQ} = \frac{I_{CQ}}{\beta} = \frac{0.548 \text{ mA}}{100} = 0.00548 \text{ mA} = 5.48 \text{ }\mu\text{A} $$
+
+Applying the bias stability rule:
+$$ R_{TH} = 0.1(1 + \beta)R_E = 0.1(101)(1 \text{ k}\Omega) = 10.1 \text{ k}\Omega $$
+
+We use KVL on the base loop to find the required Thevenin voltage:
+$$ V_{TH} = I_{BQ} R_{TH} + V_{BE(on)} + I_{EQ} R_E $$
+$$ V_{TH} = (0.00548)(10.1) + 0.7 + (101 \cdot 0.00548)(1) = 0.0553 + 0.7 + 0.553 = 1.309 \text{ V} $$
+
+Using the voltage divider equation to find $R_1$:
+$$ V_{TH} = \frac{R_{TH}}{R_1} V_{CC} \implies 1.309 = \frac{10.1}{R_1} (3.3) \implies R_1 = 25.46 \text{ k}\Omega $$
+
+Using the parallel resistance relationship to find $R_2$:
+$$ R_{TH} = \frac{R_1 R_2}{R_1 + R_2} \implies 10.1 = \frac{25.46 \cdot R_2}{25.46 + R_2} \implies R_2 = 16.74 \text{ k}\Omega $$
+
+\subsection{Part B - Small-Signal Voltage Gain}
+Calculate the small-signal resistance $r_\pi$:
+$$ r_\pi = \frac{\beta V_T}{I_{CQ}} = \frac{100 \cdot 0.026}{0.548 \text{ mA}} \approx 4.74 \text{ k}\Omega $$
+
+The voltage gain is given by:
+$$ A_v = \frac{-\beta R_C}{r_\pi + (1 + \beta)R_E} $$
+$$ A_v = \frac{-100 \cdot 2}{4.74 + (101 \cdot 1)} = \frac{-200}{105.74} \approx -1.89 $$
+
+\end{document}
