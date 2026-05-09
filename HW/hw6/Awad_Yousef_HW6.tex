@@ -1,0 +1,270 @@
+\documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[american]{circuitikz} 
+\usepackage[plain]{algorithm}
+\usepackage{algpseudocode}
+\usepackage{graphicx}
+\usepackage{pgfplots}
+\usepackage{subcaption}
+\pgfplotsset{compat=1.18}
+
+\usetikzlibrary{automata,positioning}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{Yousef Alaa Awad}
+\chead{\hmwkClass\: \hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+%
+% Create Problem Sections
+%
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+
+\newcommand{\hmwkTitle}{Homework\ \#6}
+\newcommand{\hmwkDueDate}{April 27, 2026}
+\newcommand{\hmwkClass}{Electronics 1}
+
+%
+% Title Page
+%
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    \normalsize\vspace{0.1in}
+    \vspace{3in}
+}
+
+\author{Yousef Alaa Awad}
+
+% Problems start here
+\begin{document}
+
+\maketitle
+\pagebreak
+
+\section{Problem 4.15}
+
+For the NMOS common-source amplifier in Figure P4.15, the transistor parameters are: $V_{TN} = 0.8\text{ V}$, $K_n = 1\text{ mA/V}^2$, and $\lambda = 0$. The circuit parameters are $V_{DD} = 5\text{ V}$, $R_S = 1\text{ k}\Omega$, $R_D = 4\text{ k}\Omega$, $R_1 = 225\text{ k}\Omega$, and $R_2 = 175\text{ k}\Omega$. (a) Calculate the quiescent values $I_{DQ}$ and $V_{DSQ}$. (b) Determine the small-signal voltage gain for $R_L = \infty$. (c) Determine the value of $R_L$ that will reduce the small-signal voltage gain to 75 percent of the value found in part (b).
+
+\begin{figure}[h!]
+    \centering
+    \begin{circuitikz}[scale=1.0, transform shape]
+        \draw (0,4) node[vcc]{$V_{DD} = 5\text{ V}$} -- (0,3);
+        \draw (0,3) -- (-3,3) to[R, l=$R_1$, a=$225\text{ k}\Omega$] (-3,0) to[R, l=$R_2$, a=$175\text{ k}\Omega$] (-3,-2) node[ground]{};
+        \draw (0,3) -- (2,3) to[R, l=$R_D$, a=$4\text{ k}\Omega$] (2,1);
+        \draw (2,0) node[nmos](M1){};
+        \draw (-3,0) -- (M1.G);
+        \draw (2,1) -- (M1.D);
+        \draw (M1.S) -- (2,-1) to[R, l=$R_S$, a=$1\text{ k}\Omega$] (2,-3) node[ground]{};
+        
+        \draw (-5.5,0) to[C, l=$C_{C1}$] (-3,0);
+        \draw (-6.5,0) node[ocirc]{} to[sV, l=$v_i$] (-6.5,-2) node[ground]{};
+        \draw (-6.5,0) -- (-5.5,0);
+        
+        \draw (2,1) to[C, l=$C_{C2}$, *-] (4.5,1) to[R, l=$R_L$] (4.5,-1) node[ground]{};
+        \draw (4.5,1) to[short, -o] (5.5,1) node[right]{$v_o$};
+        
+        \draw[dashed] (-3.8,1.5) -- (-3.8,-1);
+        \draw[-latex] (-5.3,1.0) node[above]{$R_{\text{in}}$} -- (-3.9,1.0);
+    \end{circuitikz}
+    \caption{Figure P4.15}
+\end{figure}
+
+\subsection{Solution}
+
+(a) Quiescent values $I_{DQ}$ and $V_{DSQ}$:
+\begin{align*}
+    V_G &= \left(\frac{R_2}{R_1 + R_2}\right) V_{DD} = \left(\frac{175}{175 + 225}\right)(5) = 2.1875\text{ V} \\
+    V_G &= V_{GS} + I_{DQ}R_S = V_{GS} + K_n(V_{GS} - V_{TN})^2 R_S \\
+    2.1875 &= V_{GS} + (1)(1)(V_{GS} - 0.8)^2 = V_{GS} + V_{GS}^2 - 1.6V_{GS} + 0.64 \\
+    0 &= V_{GS}^2 - 0.6V_{GS} - 1.5475 \Rightarrow V_{GS} = 1.58\text{ V} \\
+    I_{DQ} &= K_n(V_{GS} - V_{TN})^2 = (1)(1.58 - 0.8)^2 = 0.608\text{ mA} \\
+    V_{DSQ} &= V_{DD} - I_{DQ}(R_S + R_D) = 5 - (0.608)(1 + 4) = 1.96\text{ V}
+\end{align*}
+
+(b) Small-signal voltage gain for $R_L = \infty$:
+\begin{align*}
+    g_m &= 2\sqrt{K_n I_{DQ}} = 2\sqrt{(1)(0.608)} = 1.56\text{ mA/V} \\
+    A_v &= \frac{-g_m R_D}{1 + g_m R_S} = \frac{-(1.56)(4)}{1 + (1.56)(1)} = -2.44
+\end{align*}
+
+(c) Value of $R_L$ that reduces small-signal voltage gain to 75 percent:
+\begin{align*}
+    A_v &= \frac{-g_m (R_D \parallel R_L)}{1 + g_m R_S} = \frac{-(1.56)(R_D \parallel R_L)}{1 + (1.56)(1)} = -0.6094(R_D \parallel R_L) \\
+    -(0.75)(2.44) &= -0.6094(R_D \parallel R_L) \Rightarrow R_D \parallel R_L = 3.0\text{ k}\Omega \\
+    4 \parallel R_L &= 3 \Rightarrow \frac{1}{R_L} = \frac{1}{3} - \frac{1}{4} = \frac{1}{12} \Rightarrow R_L = 12\text{ k}\Omega
+\end{align*}
+
+\pagebreak
+\section{Problem 4.18}
+
+The ac equivalent circuit of a common-source amplifier is shown in Figure P4.18. The small-signal parameters of the transistor are $g_m = 2\text{ mA/V}$ and $r_o = \infty$. (a) The voltage gain is found to be $A_v = V_o/V_i = -15$ with $R_S = 0$. What is the value of $R_D$? (b) A source resistor $R_S$ is inserted. Assuming the transistor parameters do not change, what is the value of $R_S$ if the voltage gain is reduced to $A_v = -5$.
+
+\begin{figure}[h!]
+    \centering
+    \begin{circuitikz}[scale=1.0, transform shape]
+        \draw (0,0) node[nmos](M1){};
+        \draw (-3,0) node[ocirc]{} to[sV, l=$V_i$, v=$+$ $-$] (-3,-2.5) node[ground]{};
+        \draw (-3,0) -- (M1.G);
+        \draw (M1.S) to[R, l=$R_S$] (0,-2.5) node[ground]{};
+        \draw (M1.D) -- (0,1) to[R, l=$R_D$, *-] (0,3.5) node[ground]{};
+        \draw (0,1) -- (1.5,1) node[ocirc]{} node[right]{$V_o$};
+    \end{circuitikz}
+    \caption{Figure P4.18}
+\end{figure}
+
+\subsection{Solution}
+
+(a) Find the value of $R_D$ for $A_v = -15$ and $R_S = 0$:
+\begin{align*}
+    A_v &= -g_m R_D \\
+    -15 &= -(2) R_D \Rightarrow R_D = 7.5\text{ k}\Omega
+\end{align*}
+
+(b) Find the value of $R_S$ if the voltage gain is reduced to $A_v = -5$:
+\begin{align*}
+    A_v &= \frac{-g_m R_D}{1 + g_m R_S} \\
+    -5 &= \frac{-(2)(7.5)}{1 + (2) R_S} \\
+    1 + 2 R_S &= \frac{15}{5} = 3 \Rightarrow 2 R_S = 2 \Rightarrow R_S = 1\text{ k}\Omega
+\end{align*}
+
+\pagebreak
+\section{Problem 4.27}
+
+For the common-source amplifier shown in Figure P4.27, the transistor parameters are $V_{TP} = -1.2\text{ V}$, $K_p = 2\text{ mA/V}^2$, and $\lambda = 0.03\text{ V}^{-1}$. The drain resistor is $R_D = 4\text{ k}\Omega$. (a) Determine $I_Q$ such that $V_{SDQ} = 5\text{ V}$. (b) Find the small-signal voltage gain for $R_L = \infty$. (c) Repeat part (b) for $R_L = 8\text{ k}\Omega$.
+
+\begin{figure}[h!]
+    \centering
+    \begin{circuitikz}[scale=1.0, transform shape]
+        \draw (0,0) node[pmos](M1){};
+        \draw (0,3) node[vcc]{$+9\text{ V}$} to[I, l=$I_Q$] (0,1);
+        \draw (0,1) -- (M1.S);
+        \draw (0,1) to[short, *-] (2,1) to[C, l=$C_S$] (2,-1) node[ground]{};
+        \draw (M1.D) to[R, l=$R_D$, a=$4\text{ k}\Omega$] (0,-3) node[vee]{$-9\text{ V}$};
+        \draw (-3,0) to[R, l=$R_G$, a=$500\text{ k}\Omega$] (-3,-2.5) node[ground]{};
+        \draw (-3,0) -- (M1.G);
+        \draw (-6,0) node[ocirc]{} to[sV, l=$v_i$] (-6,-2.5) node[ground]{};
+        \draw (-6,0) to[C, l=$C_{C1}$] (-3,0);
+        \draw (M1.D) to[short, *-] (2,-1) to[C, l=$C_{C2}$] (4,-1) to[R, l=$R_L$] (4,-3) node[ground]{};
+        \draw (4,-1) to[short, -o] (5,-1) node[right]{$v_o$};
+    \end{circuitikz}
+    \caption{Figure P4.27}
+\end{figure}
+
+\subsection{Solution}
+
+(a) Determine $I_Q$ such that $V_{SDQ} = 5\text{ V}$:
+\begin{align*}
+    V_S &= V_{SGQ} \\
+    V_D &= I_{DQ}R_D - 9 \\
+    V_{SDQ} &= V_S - V_D = V_{SGQ} - (I_{DQ}R_D - 9) \Rightarrow V_{SGQ} = V_{SDQ} + I_{DQ}R_D - 9 \\
+    V_{SGQ} &= 5 + I_{DQ}(4) - 9 = 4 I_{DQ} - 4 \\
+    I_{DQ} &= K_p(V_{SGQ} + V_{TP})^2 = 2(V_{SGQ} - 1.2)^2 \\
+    V_{SGQ} &= 4 [2(V_{SGQ} - 1.2)^2] - 4 = 8(V_{SGQ}^2 - 2.4 V_{SGQ} + 1.44) - 4 \\
+    0 &= 8 V_{SGQ}^2 - 20.2 V_{SGQ} + 7.52 \Rightarrow V_{SGQ} = 2.071\text{ V} \\
+    I_{DQ} &= I_Q = K_p(V_{SGQ} + V_{TP})^2 = 2(2.071 - 1.2)^2 = 1.518\text{ mA}
+\end{align*}
+
+(b) Find the small-signal voltage gain for $R_L = \infty$:
+\begin{align*}
+    g_m &= 2\sqrt{K_p I_{DQ}} = 2\sqrt{(2)(1.518)} = 3.485\text{ mA/V} \\
+    r_o &= \frac{1}{\lambda I_{DQ}} = \frac{1}{(0.03)(1.518)} = 22\text{ k}\Omega \\
+    A_v &= -g_m (R_D \parallel r_o) = -(3.485)(4 \parallel 22) = -11.8
+\end{align*}
+
+(c) Repeat part (b) for $R_L = 8\text{ k}\Omega$:
+\begin{align*}
+    A_v &= -g_m (R_D \parallel r_o \parallel R_L) = -(3.485)(4 \parallel 22 \parallel 8) = -8.29
+\end{align*}
+
+\pagebreak
+\section{Problem 4.36}
+
+The parameters of the circuit in Figure P4.36 are $R_S = 4\text{ k}\Omega$, $R_1 = 850\text{ k}\Omega$, $R_2 = 350\text{ k}\Omega$, and $R_L = 4\text{ k}\Omega$. The transistor parameters are $V_{TP} = -1.2\text{ V}$, $k'_p = 40\text{ }\mu\text{A/V}^2$, $W/L = 80$, and $\lambda = 0.05\text{ V}^{-1}$. (a) Determine $I_{DQ}$ and $V_{SDQ}$. (b) Find the small-signal voltage gain $A_v = v_o/v_i$. (c) Determine the small-signal circuit transconductance gain $A_g = i_o/v_i$. (d) Find the small-signal output resistance $R_o$.
+
+\begin{figure}[h!]
+    \centering
+    \begin{circuitikz}[scale=1.0, transform shape]
+        \draw (0,0) node[pmos](M1){};
+        \draw (0,4.5) node[vcc]{$V_{DD} = 10\text{ V}$} -- (0,4);
+        \draw (0,4) -- (-3,4) to[R, l=$R_1$, a=$850\text{ k}\Omega$] (-3,0) to[R, l=$R_2$, a=$350\text{ k}\Omega$] (-3,-2.5) node[ground]{};
+        \draw (0,4) to[R, l=$R_S$, a=$4\text{ k}\Omega$] (0,1);
+        \draw (0,1) -- (M1.S);
+        \draw (M1.D) -- (0,-1) node[ground]{};
+        \draw (-3,0) -- (M1.G);
+        \draw (-6.5,0) node[ocirc]{} to[sV, l=$v_i$, i=$i_i$] (-6.5,-2.5) node[ground]{};
+        \draw (-6.5,0) to[C, l=$C_{C1}$] (-3,0);
+        \draw (0,1) to[short, *-] (2,1) to[C, l=$C_{C2}$] (4,1) to[R, l=$R_L$, i=$i_o$, a=$4\text{ k}\Omega$] (4,-1) node[ground]{};
+        \draw (4,1) to[short, -o] (5,1) node[right]{$v_o$};
+        \draw[-latex] (3.0,1.8) node[above]{$R_o$} -- (2.0,1.8);
+    \end{circuitikz}
+    \caption{Figure P4.36}
+\end{figure}
+
+\subsection{Solution}
+
+(a) Determine $I_{DQ}$ and $V_{SDQ}$:
+\begin{align*}
+    V_G &= \left(\frac{R_2}{R_1 + R_2}\right) V_{DD} = \left(\frac{350}{350 + 850}\right)(10) = 2.917\text{ V} \\
+    V_{DD} &= I_{DQ}R_S + V_{SGQ} + V_G \Rightarrow 10 = I_{DQ}(4) + V_{SGQ} + 2.917 \\
+    K_p &= \frac{1}{2} k'_p \frac{W}{L} = \frac{1}{2} (0.04\text{ mA/V}^2)(80) = 1.6\text{ mA/V}^2 \\
+    10 &= (1.6)(V_{SGQ} - 1.2)^2 (4) + V_{SGQ} + 2.917 \\
+    10 &= 6.4(V_{SGQ}^2 - 2.4 V_{SGQ} + 1.44) + V_{SGQ} + 2.917 \\
+    0 &= 6.4 V_{SGQ}^2 - 14.36 V_{SGQ} + 2.133 \Rightarrow V_{SGQ} = 2.084\text{ V} \\
+    I_{DQ} &= 1.6(2.084 - 1.2)^2 = 1.25\text{ mA} \\
+    V_{SDQ} &= V_S - V_D = (10 - I_{DQ}R_S) - 0 = 10 - (1.25)(4) = 5\text{ V}
+\end{align*}
+
+(b) Find the small-signal voltage gain $A_v = v_o/v_i$:
+\begin{align*}
+    g_m &= 2\sqrt{K_p I_{DQ}} = 2\sqrt{(1.6)(1.25)} = 2.828\text{ mA/V} \\
+    r_o &= \frac{1}{\lambda I_{DQ}} = \frac{1}{(0.05)(1.25)} = 16\text{ k}\Omega \\
+    A_v &= \frac{g_m (r_o \parallel R_S \parallel R_L)}{1 + g_m (r_o \parallel R_S \parallel R_L)} \\
+    r_o \parallel R_S \parallel R_L &= 16 \parallel 4 \parallel 4 = 1.778\text{ k}\Omega \\
+    A_v &= \frac{(2.828)(1.778)}{1 + (2.828)(1.778)} = 0.834
+\end{align*}
+
+(c) Determine the small-signal circuit transconductance gain $A_g = i_o/v_i$:
+\begin{align*}
+    A_g &= \frac{i_o}{v_i} = \frac{i_o}{v_o} \frac{v_o}{v_i} = \frac{1}{R_L} A_v = \frac{1}{4}(0.834) = 0.2085\text{ mA/V}
+\end{align*}
+
+(d) Find the small-signal output resistance $R_o$:
+\begin{align*}
+    R_o &= \frac{1}{g_m} \parallel R_S \parallel r_o \\
+    \frac{1}{R_o} &= g_m + \frac{1}{R_S} + \frac{1}{r_o} = 2.828 + \frac{1}{4} + \frac{1}{16} = 3.1405\text{ mS} \\
+    R_o &= \frac{1}{3.1405} = 0.3184\text{ k}\Omega = 318.4\text{ }\Omega
+\end{align*}
+
+\end{document}
